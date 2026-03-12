@@ -10,6 +10,20 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['QR_FOLDER'] = 'static/qrcodes'
 
+def generate_wifi_qr(ssid, password, encryption):
+    return f"WIFI:T:{encryption};S:{ssid};P:{password};;"
+
+def generate_vcard_qr(name, phone, email, organization, website):
+    vcard = f"""BEGIN:VCARD
+VERSION:3.0
+FN:{name}
+TEL:{phone}
+EMAIL:{email}
+ORG:{organization}
+URL:{website}
+END:VCARD"""
+    return vcard
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -17,12 +31,43 @@ def index():
 @app.route('/generate', methods=['POST'])
 def generate_qr():
     data = request.json
-    url = data.get('url')
+    qr_type = data.get('type', 'url')
     fill_color = data.get('fillColor', 'black')
     back_color = data.get('backColor', 'white')
     size = data.get('size', 'medium')
     error_level = data.get('errorLevel', 'H')
     logo_data = data.get('logo')
+    
+    # Generate QR data based on type
+    if qr_type == 'url':
+        qr_data = data.get('url')
+    elif qr_type == 'phone':
+        qr_data = f"tel:{data.get('phone')}"
+    elif qr_type == 'email':
+        email = data.get('email')
+        subject = data.get('subject', '')
+        body = data.get('body', '')
+        qr_data = f"mailto:{email}?subject={subject}&body={body}"
+    elif qr_type == 'sms':
+        phone = data.get('phone')
+        message = data.get('message', '')
+        qr_data = f"SMSTO:{phone}:{message}"
+    elif qr_type == 'wifi':
+        qr_data = generate_wifi_qr(
+            data.get('ssid'),
+            data.get('password'),
+            data.get('encryption', 'WPA')
+        )
+    elif qr_type == 'vcard':
+        qr_data = generate_vcard_qr(
+            data.get('name'),
+            data.get('phone'),
+            data.get('email'),
+            data.get('organization', ''),
+            data.get('website', '')
+        )
+    else:
+        qr_data = data.get('url')
     
     size_map = {'small': (5, 2), 'medium': (10, 4), 'large': (15, 6)}
     box_size, border = size_map.get(size, (10, 4))
@@ -36,7 +81,7 @@ def generate_qr():
     error_correction = error_map.get(error_level, qrcode.constants.ERROR_CORRECT_H)
     
     qr = qrcode.QRCode(version=1, error_correction=error_correction, box_size=box_size, border=border)
-    qr.add_data(url)
+    qr.add_data(qr_data)
     qr.make(fit=True)
     img = qr.make_image(fill_color=fill_color, back_color=back_color).convert('RGB')
     

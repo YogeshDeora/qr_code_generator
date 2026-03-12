@@ -9,13 +9,108 @@
 <body>
     <div class="container">
         <h1>🎨 QR Code Generator</h1>
-        <p class="subtitle">Create custom QR codes with logo, colors, and multiple formats</p>
+        <p class="subtitle">Create custom QR codes for URLs, WiFi, Contacts, and more</p>
         
         <div class="main-content">
             <div class="form-section">
                 <div class="input-group">
-                    <label>Enter URL or Text</label>
-                    <input type="text" id="url" placeholder="https://example.com" required>
+                    <label>QR Code Type</label>
+                    <select id="qrType" onchange="changeQRType()">
+                        <option value="url">🔗 URL / Text</option>
+                        <option value="phone">📞 Phone Number</option>
+                        <option value="email">📧 Email</option>
+                        <option value="sms">💬 SMS</option>
+                        <option value="wifi">📶 WiFi</option>
+                        <option value="vcard">👤 Contact Card (vCard)</option>
+                    </select>
+                </div>
+
+                <!-- URL Form -->
+                <div id="urlForm" class="qr-form">
+                    <div class="input-group">
+                        <label>Enter URL or Text</label>
+                        <input type="text" id="url" placeholder="https://example.com">
+                    </div>
+                </div>
+
+                <!-- Phone Form -->
+                <div id="phoneForm" class="qr-form" style="display: none;">
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phoneNumber" placeholder="+1234567890">
+                    </div>
+                </div>
+
+                <!-- Email Form -->
+                <div id="emailForm" class="qr-form" style="display: none;">
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="emailAddress" placeholder="example@email.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Subject (Optional)</label>
+                        <input type="text" id="emailSubject" placeholder="Email subject">
+                    </div>
+                    <div class="input-group">
+                        <label>Message (Optional)</label>
+                        <textarea id="emailBody" placeholder="Email message" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <!-- SMS Form -->
+                <div id="smsForm" class="qr-form" style="display: none;">
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="smsPhone" placeholder="+1234567890">
+                    </div>
+                    <div class="input-group">
+                        <label>Message</label>
+                        <textarea id="smsMessage" placeholder="SMS message" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <!-- WiFi Form -->
+                <div id="wifiForm" class="qr-form" style="display: none;">
+                    <div class="input-group">
+                        <label>WiFi Name (SSID)</label>
+                        <input type="text" id="wifiSSID" placeholder="MyWiFi">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="text" id="wifiPassword" placeholder="password123">
+                    </div>
+                    <div class="input-group">
+                        <label>Encryption Type</label>
+                        <select id="wifiEncryption">
+                            <option value="WPA">WPA/WPA2</option>
+                            <option value="WEP">WEP</option>
+                            <option value="nopass">None</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- vCard Form -->
+                <div id="vcardForm" class="qr-form" style="display: none;">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="vcardName" placeholder="John Doe">
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="vcardPhone" placeholder="+1234567890">
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="vcardEmail" placeholder="john@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Organization (Optional)</label>
+                        <input type="text" id="vcardOrg" placeholder="Company Name">
+                    </div>
+                    <div class="input-group">
+                        <label>Website (Optional)</label>
+                        <input type="url" id="vcardWebsite" placeholder="https://example.com">
+                    </div>
                 </div>
 
                 <div class="input-group">
