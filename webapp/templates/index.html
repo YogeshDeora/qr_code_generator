@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 QR Code Generator</h1>
+        <p class="subtitle">Create custom QR codes with logo, colors, and multiple formats</p>
+        
+        <div class="main-content">
+            <div class="form-section">
+                <div class="input-group">
+                    <label>Enter URL or Text</label>
+                    <input type="text" id="url" placeholder="https://example.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Upload Logo (Optional)</label>
+                    <input type="file" id="logo" accept="image/*">
+                </div>
+
+                <div class="color-group">
+                    <div class="input-group">
+                        <label>QR Color</label>
+                        <input type="color" id="fillColor" value="#000000">
+                    </div>
+                    <div class="input-group">
+                        <label>Background Color</label>
+                        <input type="color" id="backColor" value="#ffffff">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Size</label>
+                    <select id="size">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Error Correction</label>
+                    <select id="errorLevel">
+                        <option value="L">L - 7% recovery</option>
+                        <option value="M">M - 15% recovery</option>
+                        <option value="Q">Q - 25% recovery</option>
+                        <option value="H" selected>H - 30% recovery (Best for logos)</option>
+                    </select>
+                </div>
+
+                <button class="btn-generate" onclick="generateQR()">Generate QR Code</button>
+            </div>
+
+            <div class="preview-section">
+                <h3>Preview</h3>
+                <div id="preview" class="preview-box">
+                    <p class="placeholder">Your QR code will appear here</p>
+                </div>
+                
+                <div id="downloadSection" style="display: none;">
+                    <div class="input-group">
+                        <label>Download Format</label>
+                        <select id="format">
+                            <option value="png">PNG</option>
+                            <option value="jpg">JPG</option>
+                            <option value="webp">WEBP</option>
+                            <option value="eps">EPS (Print)</option>
+                        </select>
+                    </div>
+                    <button class="btn-download" onclick="downloadQR()">Download QR Code</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
